@@ -1,0 +1,14 @@
+name = "gmailbuys-bots"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Vinculación con la base de datos D1
+[[d1_databases]]
+binding = "GDB"
+database_name = "gmailbuys-db"
+database_id = "73f90fb3-6d21-4613-82eb-1a8a41ba282b"
+
+# Variables NO sensibles (las sensibles van como Secrets en el dashboard)
+[vars]
+WORKER_URL = "https://gmailbuys-bots.alcalidne.workers.dev"
