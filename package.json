@@ -1,0 +1,19 @@
+{
+  "name": "gmailbuys-bots",
+  "version": "1.0.0",
+  "description": "Bot de Telegram Gmail Buy's en Cloudflare Workers",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute gmailbuys-db --remote --file=./schema.sql",
+    "db:init:local": "wrangler d1 execute gmailbuys-db --local --file=./schema.sql"
+  },
+  "dependencies": {
+    "grammy": "^1.30.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.80.0"
+  }
+}
