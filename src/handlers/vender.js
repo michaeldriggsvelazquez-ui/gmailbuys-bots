@@ -4,10 +4,9 @@
 import { obtenerUsuario, insertarCuenta } from "../db.js";
 import { enviarMensaje } from "../telegram.js";
 import { MENU_PRINCIPAL, TECLADO_CANCELAR, inlineAprobarRechazarCuenta } from "../menus.js";
-import { PRECIOS_VIP, ESTADOS } from "../config.js";
+import { ESTADOS, precioCuentaSegunVip } from "../config.js";
 import { setEstado, setDatos, getSesion, finSesion } from "../session.js";
 
-// ============ PASO 1: Pedir usuario Gmail ============
 export async function iniciarVenta(env, msg, config) {
   const userId = msg.from.id;
   await setEstado(env, userId, ESTADOS.VENDIENDO_USUARIO, {});
@@ -21,7 +20,6 @@ export async function iniciarVenta(env, msg, config) {
   );
 }
 
-// ============ PASO 2: Recibir usuario Gmail ============
 export async function recibirUsuario(env, msg, config) {
   const userId = msg.from.id;
   const texto = (msg.text || "").trim();
@@ -62,7 +60,6 @@ export async function recibirUsuario(env, msg, config) {
   );
 }
 
-// ============ PASO 3: Recibir contraseña y guardar ============
 export async function recibirContrasena(env, msg, config) {
   const userId = msg.from.id;
   const texto = (msg.text || "").trim();
@@ -89,18 +86,12 @@ export async function recibirContrasena(env, msg, config) {
     return;
   }
 
-  // Calcular precio según VIP
+  // Calcular precio con el helper blindado
   const u = await obtenerUsuario(env, userId);
-  let precio = PRECIOS_VIP.normal.cuenta;
-  if (u && u.vip_activo) {
-    if (u.vip === 1) precio = PRECIOS_VIP[1].cuenta;
-    else if (u.vip === 2) precio = PRECIOS_VIP[2].cuenta;
-    else if (u.vip === 3) precio = PRECIOS_VIP[3].cuenta;
-  }
+  const precio = precioCuentaSegunVip(u?.vip, u?.vip_activo);
 
   const cuentaId = await insertarCuenta(env, userId, usuarioGmail, texto, precio);
 
-  // Avisar al admin
   const user = msg.from;
   const username = user.username ? `@${user.username}` : "Sin username";
   const adminMsg =
@@ -127,4 +118,4 @@ export async function recibirContrasena(env, msg, config) {
     "✨ ¡Gracias por vender con nosotros!",
     { reply_markup: MENU_PRINCIPAL }
   );
-}
+                      }
