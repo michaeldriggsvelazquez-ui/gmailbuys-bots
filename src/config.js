@@ -12,9 +12,6 @@ export function getConfig(env) {
   };
 }
 
-// =====================================================
-// ESTADOS DE CONVERSACIÓN (equivalente a ConversationHandler)
-// =====================================================
 export const ESTADOS = {
   IDLE: null,
   VENDIENDO_USUARIO: "VENDIENDO_USUARIO",
@@ -41,6 +38,27 @@ export const PRECIOS_VIP = {
 };
 
 // =====================================================
-// CONSTANTES GENERALES
+// HELPERS DE PRECIOS
 // =====================================================
+
+// Devuelve SOLO el número de precio de cuenta (nunca undefined)
+export function precioCuentaSegunVip(vip, vipActivo) {
+  const v = Number(vip) || 0;
+  const a = Number(vipActivo) || 0;
+  if (a === 1 && v === 1) return PRECIOS_VIP[1].cuenta;
+  if (a === 1 && v === 2) return PRECIOS_VIP[2].cuenta;
+  if (a === 1 && v === 3) return PRECIOS_VIP[3].cuenta;
+  return PRECIOS_VIP.normal.cuenta;
+}
+
+// Devuelve SOLO el número de precio de referido
+export function precioReferidoSegunVip(vip, vipActivo) {
+  const v = Number(vip) || 0;
+  const a = Number(vipActivo) || 0;
+  if (a === 1 && v === 1) return PRECIOS_VIP[1].referido;
+  if (a === 1 && v === 2) return PRECIOS_VIP[2].referido;
+  if (a === 1 && v === 3) return PRECIOS_VIP[3].referido;
+  return PRECIOS_VIP.normal.referido;
+}
+
 export const MINIMO_RETIRO = 200;
